@@ -23,8 +23,20 @@ public class RecipeService {
                 "Usuário não encontrado! Id: " + id + ", Tipo: " + Recipe.class.getName()));
     }
 
-    public List<Recipe> findRecipesByIngredient(String ingredientName) {
-        return recipeRepository.findRecipesByIngredient(ingredientName);
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
+
+    public List<Recipe> findRecipesByName(String name) {
+        return recipeRepository.findByName(name);
+    }
+
+    public Optional<Recipe> findRecipesByNameAndAuthor(String name, String author) {
+        return recipeRepository.findByNameAndAuthor(name, author);
+    }
+
+    public List<Recipe> findRecipesByIngredient(String ingredient) {
+        return recipeRepository.findByIngredientsContaining(ingredient);
     }
 
     @Transactional
@@ -39,12 +51,11 @@ public class RecipeService {
         Recipe newObj = findById(obj.getId());
         newObj.setId(null);
         newObj.setName(obj.getName());
-        newObj.setDescription(obj.getDescription());
-        newObj.setPrepTime(obj.getPrepTime());
-        newObj.setCookTime(obj.getCookTime());
-        newObj.setTotalTime(obj.getTotalTime());
-        newObj.setServings(obj.getServings());
         newObj.setAuthor(obj.getAuthor());
+        newObj.setIngredients(obj.getIngredients());
+        newObj.setInstruction1(obj.getInstruction1());
+        newObj.setInstruction2(obj.getInstruction2());
+        newObj.setCategory(obj.getCategory());
         return this.recipeRepository.save(newObj);
 
     }

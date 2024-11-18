@@ -1,29 +1,26 @@
 package com.LilGlen.Recipes.models;
 
-import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
 
 @Entity
 @Table(name = Recipe.TABLE_NAME)
 public class Recipe {
 
     public interface CreateRecipe {
-
     }
 
     public interface UpdateRecipe {
-
     }
 
     public static final String TABLE_NAME = "recipe";
@@ -38,39 +35,37 @@ public class Recipe {
     @NotEmpty(groups = CreateRecipe.class)
     private String name;
 
-    private String description;
-
-    private int prepTime;
-
-    private int cookTime;
-
-    private int totalTime;
-
-    private int servings;
-
     private String author;
 
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeStep> steps;
+    @Column(name = "ingredients", columnDefinition = "LONGTEXT")
+    @NotNull(groups = CreateRecipe.class)
+    @NotEmpty(groups = CreateRecipe.class)
+    private String ingredients;
 
-    @OneToMany(mappedBy = "recipe")
-    private List<RecipeIngredient> ingredients;
+    @Column(name = "instruction1", columnDefinition = "LONGTEXT")
+    @NotNull(groups = CreateRecipe.class)
+    @NotEmpty(groups = CreateRecipe.class)
+    private String instruction1;
+
+    @Column(name = "instruction2",columnDefinition = "LONGTEXT")
+    private String instruction2;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category")
+    private RecipeCategory category;
 
     public Recipe() {
     }
 
-    public Recipe(Long id, String name, String description, int prepTime, int cookTime, int totalTime, int servings,
-            String author, List<RecipeStep> steps, List<RecipeIngredient> ingredients) {
+    public Recipe(Long id, String name, String author, String ingredients, String instruction1, String instruction2,
+            RecipeCategory category) {
         this.id = id;
         this.name = name;
-        this.description = description;
-        this.prepTime = prepTime;
-        this.cookTime = cookTime;
-        this.totalTime = totalTime;
-        this.servings = servings;
         this.author = author;
-        this.steps = steps;
         this.ingredients = ingredients;
+        this.instruction1 = instruction1;
+        this.instruction2 = instruction2;
+        this.category = category;
     }
 
     public Long getId() {
@@ -89,46 +84,6 @@ public class Recipe {
         this.name = name;
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getPrepTime() {
-        return this.prepTime;
-    }
-
-    public void setPrepTime(int prepTime) {
-        this.prepTime = prepTime;
-    }
-
-    public int getCookTime() {
-        return this.cookTime;
-    }
-
-    public void setCookTime(int cookTime) {
-        this.cookTime = cookTime;
-    }
-
-    public int getTotalTime() {
-        return this.totalTime;
-    }
-
-    public void setTotalTime(int totalTime) {
-        this.totalTime = totalTime;
-    }
-
-    public int getServings() {
-        return this.servings;
-    }
-
-    public void setServings(int servings) {
-        this.servings = servings;
-    }
-
     public String getAuthor() {
         return this.author;
     }
@@ -137,20 +92,71 @@ public class Recipe {
         this.author = author;
     }
 
-    public List<RecipeStep> getSteps() {
-        return this.steps;
-    }
-
-    public void setSteps(List<RecipeStep> steps) {
-        this.steps = steps;
-    }
-
-    public List<RecipeIngredient> getIngredients() {
+    public String getIngredients() {
         return this.ingredients;
     }
 
-    public void setIngredients(List<RecipeIngredient> ingredients) {
+    public void setIngredients(String ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getInstruction1() {
+        return this.instruction1;
+    }
+
+    public void setInstruction1(String instruction1) {
+        this.instruction1 = instruction1;
+    }
+
+    public String getInstruction2() {
+        return this.instruction2;
+    }
+
+    public void setInstruction2(String instruction2) {
+        this.instruction2 = instruction2;
+    }
+
+    public RecipeCategory getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(RecipeCategory category) {
+        this.category = category;
+    }
+
+    public Recipe id(Long id) {
+        setId(id);
+        return this;
+    }
+
+    public Recipe name(String name) {
+        setName(name);
+        return this;
+    }
+
+    public Recipe author(String author) {
+        setAuthor(author);
+        return this;
+    }
+
+    public Recipe ingredients(String ingredients) {
+        setIngredients(ingredients);
+        return this;
+    }
+
+    public Recipe instruction1(String instruction1) {
+        setInstruction1(instruction1);
+        return this;
+    }
+
+    public Recipe instruction2(String instruction2) {
+        setInstruction2(instruction2);
+        return this;
+    }
+
+    public Recipe category(RecipeCategory category) {
+        setCategory(category);
+        return this;
     }
 
     @Override
@@ -164,15 +170,12 @@ public class Recipe {
         Recipe other = (Recipe) obj;
         return this.id == other.id &&
                 Objects.equals(this.name, other.name) &&
-                Objects.equals(this.id, other.id) &&
-                Objects.equals(this.description, other.description) &&
-                Objects.equals(this.prepTime, other.prepTime) &&
-                Objects.equals(this.cookTime, other.cookTime) &&
-                Objects.equals(this.totalTime, other.totalTime) &&
-                Objects.equals(this.servings, other.servings) &&
+                Objects.equals(this.instruction1, other.instruction1) &&
+                Objects.equals(this.instruction2, other.instruction2) &&
+
+                Objects.equals(this.ingredients, other.ingredients) &&
                 Objects.equals(this.author, other.author) &&
-                Objects.equals(this.steps, other.steps) &&
-                Objects.equals(this.ingredients, other.ingredients);
+                Objects.equals(this.category, other.category);
 
     }
 
@@ -184,5 +187,17 @@ public class Recipe {
         return result;
     }
 
-}
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", name='" + getName() + "'" +
+                ", author='" + getAuthor() + "'" +
+                ", ingredients='" + getIngredients() + "'" +
+                ", instruction1='" + getInstruction1() + "'" +
+                ", instruction2='" + getInstruction2() + "'" +
+                ", category='" + getCategory() + "'" +
+                "}";
+    }
 
+}
