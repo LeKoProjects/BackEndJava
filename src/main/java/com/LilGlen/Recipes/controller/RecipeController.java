@@ -28,7 +28,7 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
@@ -40,7 +40,7 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    // Pesquisa receitas por ingrediente
+    // Pesquisa receitas pelo ingrediente
     @GetMapping("/searchByIngredient")
     public ResponseEntity<List<Recipe>> findRecipesByIngredient(@RequestParam String ingredient) {
         List<Recipe> recipes = recipeService.findRecipesByIngredient(ingredient);
