@@ -1,8 +1,8 @@
 FROM ubuntu:latest AS build
-
+    
 COPY . .
 
-RUN mvn clean install -DskipTests
+RUN mvn clean package -DskipTests
 
 FROM openjdk:17-jdk-slim
 
