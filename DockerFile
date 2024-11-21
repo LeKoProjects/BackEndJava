@@ -1,8 +1,9 @@
 FROM ubuntu:latest AS build
-    
+
 COPY . .
 
-RUN mvn clean package -DskipTests
+RUN apt-get install maven -y
+RUN mvn clean install -DskipTests
 
 FROM openjdk:17-jdk-slim
 
