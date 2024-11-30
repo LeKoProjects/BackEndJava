@@ -5,15 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.LilGlen.Recipes.models.Recipe;
 import com.LilGlen.Recipes.models.RecipeCategory;
@@ -45,23 +37,13 @@ public class RecipeController {
         }
     }
 
-    // Pesquisa receitas pelo nome
-    @GetMapping("/searchByName")
-    public ResponseEntity<List<Recipe>> findRecipesByName(@RequestParam String name) {
-        List<Recipe> recipes = recipeService.findRecipesByName(name);
-        return ResponseEntity.ok(recipes);
-    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Recipe>> searchRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String ingredient,
+            @RequestParam(required = false) RecipeCategory category) {
 
-    // Pesquisa receitas pelo ingrediente
-    @GetMapping("/searchByIngredient")
-    public ResponseEntity<List<Recipe>> findRecipesByIngredient(@RequestParam String ingredient) {
-        List<Recipe> recipes = recipeService.findRecipesByIngredient(ingredient);
-        return ResponseEntity.ok(recipes);
-    }
-
-    @GetMapping("/searchByCategory")
-    public ResponseEntity<List<Recipe>> findRecipesByCategory(@RequestParam RecipeCategory category) {
-        List<Recipe> recipes = recipeService.findRecipesByCategory(category);
+        List<Recipe> recipes = recipeService.searchRecipes(name, ingredient, category);
         return ResponseEntity.ok(recipes);
     }
 
@@ -82,5 +64,4 @@ public class RecipeController {
         recipeService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }

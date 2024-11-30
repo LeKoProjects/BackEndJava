@@ -21,23 +21,19 @@ public class RecipeService {
     public Recipe findById(Long id) {
         Optional<Recipe> recipe = this.recipeRepository.findById(id);
         return recipe.orElseThrow(() -> new RuntimeException(
-                "Usuário não encontrado! Id: " + id + ", Tipo: " + Recipe.class.getName()));
+                "Receita não encontrada! Id: " + id + ", Tipo: " + Recipe.class.getName()));
     }
 
     public List<Recipe> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
-    public List<Recipe> findRecipesByName(String name) {
-        return recipeRepository.findByName(name);
-    }
-
-    public Optional<Recipe> findRecipesByNameAndAuthor(String name, String author) {
-        return recipeRepository.findByNameAndAuthor(name, author);
-    }
-
-    public List<Recipe> findRecipesByIngredient(String ingredient) {
-        return recipeRepository.findByIngredientsContaining(ingredient);
+    public List<Recipe> searchRecipes(String name, String ingredient, RecipeCategory category) {
+        return recipeRepository.findAll().stream()
+                .filter(recipe -> name == null || recipe.getName().contains(name))
+                .filter(recipe -> ingredient == null || recipe.getIngredients().contains(ingredient))
+                .filter(recipe -> category == null || recipe.getCategory().equals(category))
+                .toList();
     }
 
     @Transactional
@@ -58,7 +54,6 @@ public class RecipeService {
         newObj.setInstruction2(obj.getInstruction2());
         newObj.setCategory(obj.getCategory());
         return this.recipeRepository.save(newObj);
-
     }
 
     public void delete(Long id) {
@@ -69,9 +64,4 @@ public class RecipeService {
             throw new RuntimeException("Não é possível excluir pois há entidades relacionadas!");
         }
     }
-
-    public List<Recipe> findRecipesByCategory(RecipeCategory category) {
-    return recipeRepository.findByCategory(category);
-}
-
 }
