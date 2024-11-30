@@ -28,13 +28,15 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public List<Recipe> searchRecipes(String name, String ingredient, RecipeCategory category) {
-        return recipeRepository.findAll().stream()
-                .filter(recipe -> name == null || recipe.getName().contains(name))
-                .filter(recipe -> ingredient == null || recipe.getIngredients().contains(ingredient))
-                .filter(recipe -> category == null || recipe.getCategory().equals(category))
-                .toList();
+    public List<Recipe> searchByQuery(String query) {
+        return recipeRepository.findByNameContainingIgnoreCaseOrIngredientsContainingIgnoreCase(query, query);
     }
+    
+
+    public List<Recipe> findRecipesByCategory(RecipeCategory category) {
+        return recipeRepository.findByCategory(category);
+    }
+
 
     @Transactional
     public Recipe create(Recipe obj) {

@@ -38,14 +38,17 @@ public class RecipeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Recipe>> searchRecipes(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String ingredient,
-            @RequestParam(required = false) RecipeCategory category) {
-
-        List<Recipe> recipes = recipeService.searchRecipes(name, ingredient, category);
+    public ResponseEntity<List<Recipe>> searchRecipes(@RequestParam String query) {
+        List<Recipe> recipes = recipeService.searchByQuery(query);
         return ResponseEntity.ok(recipes);
     }
+    
+
+    @GetMapping("/searchByCategory")
+    public ResponseEntity<List<Recipe>> findRecipesByCategory(@RequestParam RecipeCategory category) {
+        List<Recipe> recipes = recipeService.findRecipesByCategory(category);
+        return ResponseEntity.ok(recipes);
+    }    
 
     @PostMapping
     public ResponseEntity<Recipe> createRecipe(@RequestBody Recipe recipe) {
